@@ -1,0 +1,52 @@
+.details__nav {
+  color: $mint;
+  list-style-type: none;
+  overflow: hidden;
+}
+
+.details__nav li {
+  cursor: pointer;
+  float: left;
+  padding: 0 10px;
+  border-right: 1px dashed $gold;
+
+  &:first-child { padding-left:    0; }
+  &:last-child  { border-right: none; }
+
+  &:hover { color: $champaign; }
+}
+
+.wedding__info p {
+  margin: 0.2rem 0;
+}
+
+.wedding__info .row {
+  margin-bottom: 1rem;
+}
+
+.wedding__info .info__description {
+  font-style: italic;
+}
+
+.wedding__map img {
+  height: 150px;
+}
+
+@media #{$mobile} {
+
+  .wedding__info { margin-bottom: 2rem; }
+
+
+  .wedding__info .info__description {
+    font-weight: bold;
+  }
+
+  .details__nav li {
+    float: none;
+    padding: 0;
+    margin-bottom: 10px;
+    border-right: none;
+    border-bottom: 1px dashed $gold;
+    font-size: 2rem;
+  }
+}

@@ -1,0 +1,29 @@
+.registries {
+  margin-top: 1rem;
+
+  a {
+    display: inline-block;
+    margin-right: 35px;
+  }
+
+  a img { height: 25px; }
+}
+
+.registry__place {
+  text-align: left;
+  img { height: 25px; }
+}
+
+.address { margin-bottom: 2rem; }
+.address:last-child { margin-bottom: 0; }
+
+.address p { margin: 0px; }
+
+
+@media #{$mobile} {
+  .registries a {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 18px;
+  }
+}

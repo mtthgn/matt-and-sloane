@@ -1,0 +1,21 @@
+.gallery-tray {
+  z-index: 2;
+  color: $white;
+  overflow: hidden;
+  height: 35px;
+}
+
+.gallery-tray__info { color: $grey; }
+
+.gallery-tray__info p {
+  line-height: 35px;
+  height: 35px;
+  margin-top: 0px;
+}
+
+.gallery-tray__info a {
+  color: $grey;
+  text-decoration: underline;
+
+  &:hover { color: $mint; }
+}
