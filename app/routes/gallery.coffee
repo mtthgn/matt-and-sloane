@@ -9,7 +9,6 @@ GalleryRoute = Ember.Route.extend
 
   renderTemplate: ->
     @render 'gallery.index'
-    @render 'gallery.tray', outlet: 'footer'
 
 
 `export default GalleryRoute`
