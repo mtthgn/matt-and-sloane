@@ -54,7 +54,8 @@ $.fn.extend
           $selext.removeClass("open").addClass("closed")
 
         if !settings.isMobile
-          $selext.on "focusin touchend", (event) ->
+
+          showOptions = (event) ->
             $selext.css("z-index", 102)
             event.preventDefault()
 
@@ -69,6 +70,10 @@ $.fn.extend
               
               $selext.removeClass(states[0]).addClass(states[1])
 
+          if /Safari/i.test(navigator.userAgent)
+            $selext.on "click", showOptions
+          else
+            $selext.on "focusin", showOptions
         else
           $selext.on "click", (event)->
             $select.focus()
@@ -76,6 +81,8 @@ $.fn.extend
 
         # When you click on a <li>, that one becomes selected
         $selext.find("li").on "click", (event) ->
+          event.stopPropagation()
+
           $li = $(event.currentTarget)
           value = $li.attr("data-value")
           # set the option in the <select> to selected
@@ -88,14 +95,14 @@ $.fn.extend
               $option.attr("selected", "selected") 
 
               # NOTE
-              $select.val($option.val()) 
+              $select.val($option.val())
+              $select.val($option.val())
               
               $option.trigger "click"
               $select.trigger "change"
 
         $select.on "change", (event) ->
           value = $select.val()
-          console.log value
           $li = $selext.find("li[data-value='#{value}']")
           $selext.find(".current").text($li.text())
           $selext.trigger("blur")

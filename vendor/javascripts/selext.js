@@ -18,7 +18,7 @@
       };
       settings = $.extend(settings, options);
       return this.each(function() {
-        var $background, $select, $selext, carot, currentOption;
+        var $background, $select, $selext, carot, currentOption, showOptions;
         $select = $(this);
         if (settings.isMobile) {
           $select.css({
@@ -62,7 +62,7 @@
             return $selext.removeClass("open").addClass("closed");
           });
           if (!settings.isMobile) {
-            $selext.on("focusin touchend", function(event) {
+            showOptions = function(event) {
               var states;
               $selext.css("z-index", 102);
               event.preventDefault();
@@ -76,7 +76,12 @@
                 }
                 return $selext.removeClass(states[0]).addClass(states[1]);
               }
-            });
+            };
+            if (/Safari/i.test(navigator.userAgent)) {
+              $selext.on("click", showOptions);
+            } else {
+              $selext.on("focusin", showOptions);
+            }
           } else {
             $selext.on("click", function(event) {
               return $select.focus();
@@ -84,6 +89,7 @@
           }
           $selext.find("li").on("click", function(event) {
             var $li, value;
+            event.stopPropagation();
             $li = $(event.currentTarget);
             value = $li.attr("data-value");
             $select.find("option:selected").removeAttr("selected");
@@ -93,6 +99,7 @@
               if ($option.val() === value) {
                 $option.attr("selected", "selected");
                 $select.val($option.val());
+                $select.val($option.val());
                 $option.trigger("click");
                 return $select.trigger("change");
               }
@@ -101,7 +108,6 @@
           $select.on("change", function(event) {
             var $li, value;
             value = $select.val();
-            console.log(value);
             $li = $selext.find("li[data-value='" + value + "']");
             $selext.find(".current").text($li.text());
             return $selext.trigger("blur");
