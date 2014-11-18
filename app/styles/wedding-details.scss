@@ -20,6 +20,12 @@
   margin: 0.2rem 0;
 }
 
+.details__tab--accommodations p a {
+  color: $mint;
+
+  &:hover { color: $champaign; }
+}
+
 .wedding__info .row {
   margin-bottom: 1rem;
 }
