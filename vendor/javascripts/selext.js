@@ -13,21 +13,20 @@
         },
         parentClass: "selext-parent",
         selectClass: "selext",
-        optionClass: "option",
-        isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        optionClass: "option"
       };
       settings = $.extend(settings, options);
       return this.each(function() {
-        var $background, $select, $selext, carot, currentOption, showOptions;
+        var $background, $select, $selext, carot, currentOption;
         $select = $(this);
-        if (settings.isMobile) {
+        if ($(window).width() > 768) {
           $select.css({
-            opacity: 0,
-            position: "absolute"
+            display: "none"
           });
         } else {
           $select.css({
-            display: "none"
+            opacity: 0,
+            position: "absolute"
           });
         }
         options = [];
@@ -42,9 +41,8 @@
           });
         }
         if (options.length > 1) {
-          $selext = $('<button/>', {
+          $selext = $('<div/>', {
             "class": "custom-select closed " + settings.parentClass,
-            type: "button",
             html: "" + carot + "<div class='current'>" + currentOption + "</div><ul class=\"" + settings.selectClass + "\">" + (options.join('')) + "</ul>"
           });
           $background = $(".selext-overlay");
@@ -57,15 +55,11 @@
             $background.fadeOut("fast");
             return $selext.removeClass("open").addClass("closed");
           });
-          $selext.on("focusout", function(event) {
-            $background.fadeOut("fast");
-            return $selext.removeClass("open").addClass("closed");
-          });
-          if (!settings.isMobile) {
-            showOptions = function(event) {
-              var states;
-              $selext.css("z-index", 102);
-              event.preventDefault();
+          $selext.on("click", function(event) {
+            var states;
+            $selext.css("z-index", 102);
+            event.preventDefault();
+            if ($(window).width() > 768) {
               if ($selext.find("li").length > 1) {
                 states = ["closed", "open"];
                 if ($selext.hasClass("open")) {
@@ -76,20 +70,12 @@
                 }
                 return $selext.removeClass(states[0]).addClass(states[1]);
               }
-            };
-            if (/Safari/i.test(navigator.userAgent)) {
-              $selext.on("click", showOptions);
             } else {
-              $selext.on("focusin", showOptions);
-            }
-          } else {
-            $selext.on("click", function(event) {
               return $select.focus();
-            });
-          }
+            }
+          });
           $selext.find("li").on("click", function(event) {
             var $li, value;
-            event.stopPropagation();
             $li = $(event.currentTarget);
             value = $li.attr("data-value");
             $select.find("option:selected").removeAttr("selected");
@@ -108,9 +94,9 @@
           $select.on("change", function(event) {
             var $li, value;
             value = $select.val();
+            console.log(value);
             $li = $selext.find("li[data-value='" + value + "']");
-            $selext.find(".current").text($li.text());
-            return $selext.trigger("blur");
+            return $selext.find(".current").text($li.text());
           });
         } else {
           $selext = $('<div/>', {

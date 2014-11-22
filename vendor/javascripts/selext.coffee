@@ -8,7 +8,6 @@ $.fn.extend
       parentClass: "selext-parent"
       selectClass: "selext"
       optionClass: "option"
-      isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
     settings = $.extend settings, options
 
     @each () ->
@@ -16,10 +15,10 @@ $.fn.extend
       # The original <select>
       $select = $(@)
 
-      if settings.isMobile
-        $select.css opacity: 0, position: "absolute"
-      else
+      if $(window).width() > 768
         $select.css display: "none"
+      else
+        $select.css opacity: 0, position: "absolute"
 
       options = []
       currentOption = $select.find("option:selected").text()
@@ -36,9 +35,8 @@ $.fn.extend
       # If there are any Options
       if options.length > 1
         # <ul> equivalent of the <select> tag
-        $selext = $('<button/>',
+        $selext = $('<div/>',
           class: "custom-select closed #{settings.parentClass}"
-          type: "button"
           html: "#{carot}<div class='current'>#{currentOption}</div><ul class=\"#{settings.selectClass}\">#{options.join('')}</ul>"
         )
 
@@ -49,15 +47,12 @@ $.fn.extend
           $background.fadeOut("fast")
           $selext.removeClass("open").addClass("closed")
 
-        $selext.on "focusout", (event)->
-          $background.fadeOut("fast")
-          $selext.removeClass("open").addClass("closed")
 
-        if !settings.isMobile
+        $selext.on "click", (event) ->
+          $selext.css("z-index", 102)
+          event.preventDefault()
 
-          showOptions = (event) ->
-            $selext.css("z-index", 102)
-            event.preventDefault()
+          if $(window).width() > 768
 
             if $selext.find("li").length > 1
               states = ["closed", "open"]
@@ -70,19 +65,12 @@ $.fn.extend
               
               $selext.removeClass(states[0]).addClass(states[1])
 
-          if /Safari/i.test(navigator.userAgent)
-            $selext.on "click", showOptions
           else
-            $selext.on "focusin", showOptions
-        else
-          $selext.on "click", (event)->
             $select.focus()
 
 
         # When you click on a <li>, that one becomes selected
         $selext.find("li").on "click", (event) ->
-          event.stopPropagation()
-
           $li = $(event.currentTarget)
           value = $li.attr("data-value")
           # set the option in the <select> to selected
@@ -95,17 +83,21 @@ $.fn.extend
               $option.attr("selected", "selected") 
 
               # NOTE
+              #
+              # I CONSIDER THIS A BUG. For whatever Reason. I have
+              # to call $select.val($option.val()) TWICE in order for
+              # the change to actually occor. So weird.
               $select.val($option.val())
-              $select.val($option.val())
+              $select.val($option.val()) 
               
               $option.trigger "click"
               $select.trigger "change"
 
         $select.on "change", (event) ->
           value = $select.val()
+          console.log value
           $li = $selext.find("li[data-value='#{value}']")
           $selext.find(".current").text($li.text())
-          $selext.trigger("blur")
 
       else
         $selext = $('<div/>',
