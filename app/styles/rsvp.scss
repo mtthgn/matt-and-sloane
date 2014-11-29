@@ -7,7 +7,7 @@ textarea, input { outline: none; }
 .form-field {
   margin: 1rem auto;
 
-  input[type="text"] {
+  input[type="text"], textarea {
     padding: 5px;
     color: $champaign;
     background-color: transparent;
@@ -17,6 +17,10 @@ textarea, input { outline: none; }
     &:focus { border: 1px dashed $mint; }
 
     &.number { width: 35px; }
+  }
+
+  textarea {
+    resize: none;
   }
 
   select {
